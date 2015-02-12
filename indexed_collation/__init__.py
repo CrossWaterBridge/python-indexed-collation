@@ -1,5 +1,5 @@
 import json
-import os
+import pkg_resources
 import re
 from icu import Locale, Collator, UnicodeString
 
@@ -8,11 +8,9 @@ class IndexedCollation:
 
     def __init__(self, iso639_3):
         try:
-            with open(os.path.join(os.path.dirname(__file__), 'data/{language}.json'.format(language=iso639_3)), 'r') as f:
-                self.spec = json.load(f)
+            self.spec = json.loads(pkg_resources.resource_string(__name__, 'data/{language}.json'.format(language=iso639_3)))
         except IOError:
-            with open(os.path.join(os.path.dirname(__file__), 'data/{language}.json'.format(language='eng')), 'r') as f:
-                self.spec = json.load(f)
+            self.spec = json.loads(pkg_resources.resource_string(__name__, 'data/{language}.json'.format(language='eng')))
 
     @property
     def section_titles(self):
