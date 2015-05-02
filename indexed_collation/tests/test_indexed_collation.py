@@ -58,3 +58,11 @@ class IndexedCollationTestCase(TestCase):
         self.assertEqual(len(sections), 2)
         self.assertEqual(sections[0], [u'zysk'])
         self.assertEqual(sections[1], [u'žena'])
+
+    def test_japanese(self):
+        titles = [u'システム', u'プログラムの追加と削除', u'フォント']
+        print IndexedCollation('jpn').sections(titles)
+        sections = [section[2] for section in IndexedCollation('jpn').sections(titles) if section[0] in [u'さ', u'は']]
+        self.assertEqual(len(sections), 2)
+        self.assertEqual(sections[0], [u'システム'])
+        self.assertEqual(sections[1], [u'フォント', u'プログラムの追加と削除'])
