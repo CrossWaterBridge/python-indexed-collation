@@ -1,2 +1,2 @@
-PyICU==1.8
+PyICU
 nose
