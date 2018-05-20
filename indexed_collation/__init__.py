@@ -1,16 +1,20 @@
+from __future__ import unicode_literals
 import json
 import pkg_resources
 import re
 from icu import Locale, Collator, UnicodeString
+from builtins import str
 
 
 class IndexedCollation:
-
     def __init__(self, iso639_3):
         try:
-            self.spec = json.loads(pkg_resources.resource_string(__name__, 'data/{language}.json'.format(language=iso639_3)))
+            self.spec = json.loads(
+                pkg_resources.resource_string(__name__, 'data/{language}.json'.format(language=iso639_3)).decode(
+                    'utf-8'))
         except IOError:
-            self.spec = json.loads(pkg_resources.resource_string(__name__, 'data/{language}.json'.format(language='eng')))
+            self.spec = json.loads(
+                pkg_resources.resource_string(__name__, 'data/{language}.json'.format(language='eng')).decode('utf-8'))
 
     @property
     def section_titles(self):
@@ -44,7 +48,7 @@ class IndexedCollation:
 
         # Populate sections
         compare = self.collator.compare
-        for obj in sorted(iterable, cmp=compare, key=lambda obj: self.transformed_for_sorting(obj, key=key)):
+        for obj in sorted(iterable, key=lambda obj: self.key_for_sorting(obj, key=key)):
             sections[self.section(obj, cmp=compare, key=key)][2].append(obj)
 
         # Remove unused classes of sections
@@ -73,5 +77,8 @@ class IndexedCollation:
         value = re.sub(r'^\W+', '', value, flags=re.UNICODE)
         return value
 
+    def key_for_sorting(self, obj, key=None):
+        return self.collator.getSortKey(self.transformed_for_sorting(obj, key=key))
+
     def to_lowercase(self, value):
-        return unicode(UnicodeString(value).toLower(self.locale))
+        return str(UnicodeString(str(value)).toLower(self.locale))
