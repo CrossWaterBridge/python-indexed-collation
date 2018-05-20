@@ -1,2 +1,3 @@
-PyICU
-nose
+future==0.16.0
+nose==1.3.7
+PyICU==2.0.3

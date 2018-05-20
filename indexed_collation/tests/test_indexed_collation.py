@@ -1,68 +1,68 @@
 # coding=utf-8
+from __future__ import unicode_literals
 from unittest import TestCase
 from indexed_collation import IndexedCollation
 
 
 class IndexedCollationTestCase(TestCase):
     def test_english_punctuation(self):
-        titles = [u'’Tis Sweet to Sing the Matchless Love', u'Teach Me to Walk in the Light']
+        titles = ['’Tis Sweet to Sing the Matchless Love', 'Teach Me to Walk in the Light']
         sections = [section[2] for section in IndexedCollation('eng').sections(titles) if section[0] == 'T']
-        self.assertEqual(len(sections), 1)
-        self.assertEqual(sections[0], [u'Teach Me to Walk in the Light', u'’Tis Sweet to Sing the Matchless Love'])
+        self.assertEqual(1, len(sections))
+        self.assertEqual(['Teach Me to Walk in the Light', '’Tis Sweet to Sing the Matchless Love'], sections[0])
 
     def test_german_whitespace1(self):
-        titles = [u'Gehet tapfer vorwärts', u'Geht hin in alle Welt', u'Geh voran!']
-        sections = [section[2] for section in IndexedCollation('deu').sections(titles) if section[0] == 'G']
-        self.assertEqual(len(sections), 1)
-        self.assertEqual(sections[0], [u'Geh voran!', u'Gehet tapfer vorwärts', u'Geht hin in alle Welt'])
+        titles = ['Gehet tapfer vorwärts', 'Geht hin in alle Welt', 'Geh voran!']
+        sections = [section[2] for section in IndexedCollation('de').sections(titles) if section[0] == 'G']
+        self.assertEqual(1, len(sections))
+        self.assertEqual(['Geh voran!', 'Gehet tapfer vorwärts', 'Geht hin in alle Welt'], sections[0])
 
     def test_german_whitespace2(self):
-        titles = [u'Herrliches Zion, hehr erbaut', u'Herr, wir wollen preisen, loben',
-                  u'Herr und Gott der Himmelsheere']
-        sections = [section[2] for section in IndexedCollation('deu').sections(titles) if section[0] == 'H']
-        self.assertEqual(len(sections), 1)
-        self.assertEqual(sections[0], [u'Herr und Gott der Himmelsheere', u'Herr, wir wollen preisen, loben',
-                                       u'Herrliches Zion, hehr erbaut'])
+        titles = ['Herrliches Zion, hehr erbaut', 'Herr, wir wollen preisen, loben',
+                  'Herr und Gott der Himmelsheere']
+        sections = [section[2] for section in IndexedCollation('de').sections(titles) if section[0] == 'H']
+        self.assertEqual(1, len(sections))
+        self.assertEqual(['Herr und Gott der Himmelsheere', 'Herr, wir wollen preisen, loben',
+                          'Herrliches Zion, hehr erbaut'], sections[0])
 
     def test_latvian(self):
-        titles = [u'\u0160ai sabat\u0101', u'Svētā gavēnī']
+        titles = ['\u0160ai sabat\u0101', 'Svētā gavēnī']
         sections = [section[2] for section in IndexedCollation('lav').sections(titles) if section[0] == 'S']
-        self.assertEqual(len(sections), 1)
-        self.assertEqual(sections[0], [u'Svētā gavēnī', u'\u0160ai sabat\u0101'])
+        self.assertEqual(1, len(sections))
+        self.assertEqual(['Svētā gavēnī', '\u0160ai sabat\u0101'], sections[0])
 
     # Lithuanian test cases derived from:
     #     http://msdn.microsoft.com/en-us/library/cc194879.aspx
 
     def test_lithuanian_i_and_y(self):
-        titles = [u'yucca', u'yen', u'yuan', u'irdisch']
+        titles = ['yucca', 'yen', 'yuan', 'irdisch']
         sections = [section[2] for section in IndexedCollation('lit').sections(titles) if section[0] == 'I']
-        self.assertEqual(len(sections), 1)
-        self.assertEqual(sections[0], [u'yen', u'irdisch', u'yuan', u'yucca'])
+        self.assertEqual(1, len(sections))
+        self.assertEqual(['yen', 'irdisch', 'yuan', 'yucca'], sections[0])
 
     def test_lithuanian_c(self):
-        titles = [u'čučet']
-        sections = [section[2] for section in IndexedCollation('lit').sections(titles) if section[0] == u'Č']
-        self.assertEqual(len(sections), 1)
-        self.assertEqual(sections[0], titles)
+        titles = ['čučet']
+        sections = [section[2] for section in IndexedCollation('lit').sections(titles) if section[0] == 'Č']
+        self.assertEqual(1, len(sections))
+        self.assertEqual(titles, sections[0])
 
     def test_lithuanian_s(self):
-        titles = [u'symbol', u'šàran', u'subtle', u'Sietla', u'ślub']
-        sections = [section[2] for section in IndexedCollation('lit').sections(titles) if section[0] in [u'S', u'Š']]
-        self.assertEqual(len(sections), 2)
-        self.assertEqual(sections[0], [u'Sietla', u'symbol', u'ślub', u'subtle'])
-        self.assertEqual(sections[1], [u'šàran'])
+        titles = ['symbol', 'šàran', 'subtle', 'Sietla', 'ślub']
+        sections = [section[2] for section in IndexedCollation('lit').sections(titles) if section[0] in ['S', 'Š']]
+        self.assertEqual(2, len(sections))
+        self.assertEqual(['Sietla', 'symbol', 'ślub', 'subtle'], sections[0])
+        self.assertEqual(['šàran'], sections[1])
 
     def test_lithuanian_z(self):
-        titles = [u'žena', u'zysk']
-        sections = [section[2] for section in IndexedCollation('lit').sections(titles) if section[0] in [u'Z', u'Ž']]
-        self.assertEqual(len(sections), 2)
-        self.assertEqual(sections[0], [u'zysk'])
-        self.assertEqual(sections[1], [u'žena'])
+        titles = ['žena', 'zysk']
+        sections = [section[2] for section in IndexedCollation('lit').sections(titles) if section[0] in ['Z', 'Ž']]
+        self.assertEqual(2, len(sections))
+        self.assertEqual(['zysk'], sections[0])
+        self.assertEqual(['žena'], sections[1])
 
     def test_japanese(self):
-        titles = [u'システム', u'プログラムの追加と削除', u'フォント']
-        print IndexedCollation('jpn').sections(titles)
-        sections = [section[2] for section in IndexedCollation('jpn').sections(titles) if section[0] in [u'さ', u'は']]
-        self.assertEqual(len(sections), 2)
-        self.assertEqual(sections[0], [u'システム'])
-        self.assertEqual(sections[1], [u'フォント', u'プログラムの追加と削除'])
+        titles = ['システム', 'プログラムの追加と削除', 'フォント']
+        sections = [section[2] for section in IndexedCollation('jpn').sections(titles) if section[0] in ['さ', 'は']]
+        self.assertEqual(2, len(sections))
+        self.assertEqual(['システム'], sections[0])
+        self.assertEqual(['フォント', 'プログラムの追加と削除'], sections[1])
