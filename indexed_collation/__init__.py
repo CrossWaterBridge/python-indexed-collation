@@ -73,8 +73,8 @@ class IndexedCollation:
 
     def transformed_for_sorting(self, obj, key=None):
         value = key(obj) if key else obj
-        # Strip leading punctuation for sorting
-        value = re.sub(r'^\W+', '', value, flags=re.UNICODE)
+        # Strip punctuation for sorting
+        value = re.sub(r'[^\w\s]+', '', value, flags=re.UNICODE)
         return value
 
     def key_for_sorting(self, obj, key=None):
